@@ -81,13 +81,6 @@ const Dashboard = () => {
               <Typography variant="h4">5.2</Typography>
             </Paper>
           </Grid>
-          {/* Additional Widgets */}
-          <Grid item xs={12}>
-            <Paper elevation={3} sx={{ p: 2 }}>
-              <Typography variant="h6">Top Vulnerabilities</Typography>
-              {/* Additional content can go here */}
-            </Paper>
-          </Grid>
         </Grid>
       </Container>
     </div>

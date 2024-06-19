@@ -13,6 +13,7 @@ const itemSlice = createSlice({
     },
     selectItem: (state, action) => {
       state.selectedItem = action.payload;
+      sessionStorage.setItem("selectedItem", JSON.stringify(action.payload));
     },
     setLoading: (state, action) => {
       state.loading = action.payload;

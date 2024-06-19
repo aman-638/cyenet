@@ -27,10 +27,11 @@ const AppRoutes = () => {
           path="/dashboard"
           element={<PrivateRoute element={<DashboardPage />} />}
         />
-        <Route path="/list/*" element={<PrivateRoute element={<ListPage />} />}>
-          {/* Nested route for ItemDetailsPage */}
-          <Route path="details" element={<ItemDetailsPage />} />
-        </Route>
+        <Route path="/list" element={<PrivateRoute element={<ListPage />} />} />
+        <Route
+          path="/list/details"
+          element={<PrivateRoute element={<ItemDetailsPage />} />}
+        />
         <Route
           path="*"
           element={<Navigate to={isAuthenticated ? "/dashboard" : "/login"} />}

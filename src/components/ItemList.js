@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setItems, selectItem, setLoading } from "../redux/itemSlice";
 
 const ItemList = () => {
-  const [items, setItems] = useState([]);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const items = useSelector((state) => state.item.items);
 
   useEffect(() => {
-    // Dummy data similar to the screenshot
     const dummyData = [
       {
         id: 1,
@@ -40,16 +42,21 @@ const ItemList = () => {
         totalVulnerabilities: 212,
         severity: { low: 30, medium: 78, high: 99, critical: 5 },
       },
-      // Add more rows as needed...
     ];
-    setItems(dummyData);
-  }, []);
+    dispatch(setItems(dummyData));
+  }, [dispatch]);
 
   const handleRowClick = (params) => {
-    const itemId = params.id;
-    sessionStorage.setItem("item_id", itemId); // Store itemId in sessionStorage
-    navigate("/list/details"); // Navigate to details page
+    const item = items.find((item) => item.id === params.id);
+    dispatch(setLoading(true));
+    dispatch(selectItem(item));
+    navigate("/list/details");
   };
+
+  useEffect(() => {
+    const storedItem = JSON.parse(sessionStorage.getItem("selectedItem"));
+    sessionStorage.setItem("previousItem", JSON.stringify(storedItem));
+  }, []);
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -89,12 +96,17 @@ const ItemList = () => {
   return (
     <div>
       <Navbar activeTab="list" handleTabChange={handleTabChange} />
-      <div style={{ height: 400, width: "100%" }}>
+      <div style={{ height: 400, width: "100%", overflowX: "auto" }}>
         <DataGrid
           rows={items}
           columns={columns}
           pageSize={5}
           onRowClick={handleRowClick}
+          componentsProps={{
+            row: {
+              style: { cursor: "pointer" },
+            },
+          }}
         />
       </div>
     </div>
